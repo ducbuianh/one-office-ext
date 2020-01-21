@@ -1,0 +1,36 @@
+<div id='w1l-select-shift-dialog' class='dialog pop-bold pop-box pop-box-click pop-box-contextmenu pop-alert draggable-done hidden' tabindex='-1' remove-monitor='1' style='max-width: 90%; position: fixed; z-index: 1000001; visibility: visible; pointer-events: visible; top: 398.5px; left: 821.5px; opacity: 1;' draggable='false' _draggable='true'>
+  <div class='dialog-header'>
+    <span class='dialog-title'>What 1office lacks</span>
+    <i ignore-draggable='' onclick='closeDialog();' class='dialog-close icon-multiply'></i>
+  </div>
+  <div class='dialog-content'>
+    <div class='dialog-message'>
+      Hãy chọn ca làm việc:<br>
+      <div class='form-group form-buttons'>
+        <div>
+          <div id='w1l-shift-1' onclick='setShift(SHIFT_800)' no-render='' class='checks radio' render-elem='1' title='Ctrl + Shift + Space' tabindex='0' checked='checked'>
+            <div></div>
+          </div>
+          8:00<br>
+          <div id='w1l-shift-2' onclick='setShift(SHIFT_830)' no-render='' class='checks radio' render-elem='1' title='Ctrl + Shift + Space' tabindex='0'>
+            <div></div>
+          </div>
+          8:30
+        </div>
+      </div>
+      Lựa chọn đơn cần tạo:<br><br>
+      <div class='form-group form-buttons'>
+        <div class='form-buttons'>
+          <button class='btn btn-default' onClick='createOvertimeData()'>Đơn làm thêm</button>
+          <button class='btn btn-default' onClick='createAbsenceData()'>Đơn nghỉ bù</button>
+        </div>
+      </div>
+      <div class='form-group form-buttons'>
+        <div class='form-buttons'>
+          <button class='btn btn-default' onClick='createInOutData()'>Đơn checkin/checkout</button>
+          <button class='btn btn-default' onClick='alert(\"Not available\")'>Đơn nghỉ phép</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
