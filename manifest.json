@@ -1,0 +1,37 @@
+{
+  "name": "What 1office lacks",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "This extension was created by DucBA",
+  "homepage_url": "https://pixta.vn",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "default_locale": "en",
+  "browser_action": {
+    "default_icon": "icons/icon19.png",
+    "default_title": "What 1office lacks"
+  },
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
+  "background": {
+    "scripts": ["js/background.js"]
+  },
+  "externally_connectable": {
+    "matches": [
+      "https://pixta.1office.vn/*"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://pixta.1office.vn/*"
+      ],
+      "js": ["js/jquery-2.1.3.min.js","js/content.js"]
+    }
+  ]
+}
