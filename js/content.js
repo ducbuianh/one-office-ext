@@ -420,7 +420,7 @@ function setShift(shift) {
 }
 
 function getShift() {
-  if (document.getElementById("w1l-shift-1").checked) return SHIFT_800;
+  if (document.getElementById("w1l-shift-1").getAttribute("checked") === "checked") return SHIFT_800;
   else return SHIFT_830;
 }
 
