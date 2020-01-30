@@ -99,11 +99,11 @@ function createOvertimeData() {
     unHighLight();
     highLight(overtimeNotCompleteData);
     localStorage.setItem("1office_late_data", JSON.stringify(overtimeNotCompleteData));
-    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;\" colspan=\"7\">Những ngày đi muộn/về sớm chưa có đơn Overtime đã được bôi đỏ, hãy kiểm tra lại và click: <button onClick=\"createOvertime();\">Continue</button> để tạo đơn Overtime</td></tr>");
+    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;\" colspan=\"7\">Những ngày đến sớm/ về muộn chưa có đơn Overtime đã được bôi đỏ, hãy kiểm tra lại và click: <button onClick=\"createOvertime();\">Continue</button> để tạo đơn Overtime</td></tr>");
     $("html, body").animate({ scrollTop: 0 }, "fast");
   } else {
     unHighLight();
-    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;color:green;\" colspan=\"7\">Chúc mừng bạn chả còn gì để làm ở đây cả</td></tr>");
+    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;color:green;\" colspan=\"7\">Hmmm... có vẻ bạn không có ngày nào overtime.</td></tr>");
     $("html, body").animate({ scrollTop: 0 }, "fast");
   }
 }
@@ -118,10 +118,8 @@ function createOvertime() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
       localStorage.removeItem('1office_overtime_data');
-      window.location.replace('https://pixta.1office.vn/approval-overtime-overtime?menu=private');
-    } else {
-      console.log(this.responseText);
-      alert(this.responseText);
+      var redirect = JSON.parse(xhr.response).redirect;
+      window.location.replace('https://pixta.1office.vn/' + redirect);   
     }
   };
 
@@ -139,6 +137,30 @@ function createOvertime() {
 
   xhr.send(param);
 }
+
+// function getLatestOvertimeId() {
+//   return new Promise(function (resolve, reject) {
+//     var xhr = new XMLHttpRequest();
+//     xhr.open('GET', 'https://pixta.1office.vn/approval-overtime-overtime?menu=private&_json=1', true);
+//     xhr.onload = function () {
+//       if (this.status >= 200 && this.status < 300) {
+//         resolve(xhr.response);
+//       } else {
+//         reject({
+//           status: this.status,
+//           statusText: xhr.statusText
+//         });
+//       }
+//     };
+//     xhr.onerror = function () {
+//       reject({
+//         status: this.status,
+//         statusText: xhr.statusText
+//       });
+//     };
+//     xhr.send();
+//   });
+// }
 
 function createAbsenceData() {
   var elems = document.querySelectorAll("td.dialog-done.pop-done.pop-control.pop-control-click.pop-connect");
@@ -159,13 +181,12 @@ function createAbsenceData() {
         var absenceStart = shift == SHIFT_800 ? "08:00" : "08:30";
         var absenceEnd = actualWorkStart
         var row = [date + "/" + (new Date()).getFullYear(), absenceStart, absenceEnd];
-        if (status == OVERTIME_DONE) absenceData.push(row);
+        absenceData.push(row);
       }
       if (isEarly(shift, actualWorkEnd)) {
         var absenceStart = actualWorkEnd
         var absenceEnd = shift == SHIFT_800 ? "17:00" : "17:30";
         var row = [date + "/" + (new Date()).getFullYear(), absenceStart, absenceEnd];
-        if (status == OVERTIME_DONE) absenceData.push(row);
       }
     }
   });
@@ -180,11 +201,11 @@ function createAbsenceData() {
     unHighLight();
     highLight(absenceData);
     localStorage.setItem("1office_absence_data", JSON.stringify(absenceData));
-    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;\" colspan=\"7\">Những ngày đi muộn có đơn Overtime được duyệt xong đã được bôi đỏ, hãy kiểm tra lại và click: <button onClick=\"createAbsence();\">Continue</button> để gửi đơn vắng mặt</td></tr>");
+    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;\" colspan=\"7\">Những ngày đi muộn/về sớm đã được bôi đỏ, hãy kiểm tra lại và click: <button onClick=\"createAbsence();\">Continue</button> để gửi đơn vắng mặt</td></tr>");
     $("html, body").animate({ scrollTop: 0 }, "fast");
   } else {
     unHighLight();
-    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;color:green;\" colspan=\"7\">Chúc mừng bạn chả còn gì để làm ở đây cả</td></tr>");
+    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;color:green;\" colspan=\"7\">Hmmm... có vẻ bạn không còn gì phải làm cả</td></tr>");
     $("html, body").animate({ scrollTop: 0 }, "fast");
   }
 }
@@ -200,9 +221,6 @@ function createAbsence() {
         if (xhr.readyState == 4 && xhr.status == 200) {
           localStorage.removeItem('1office_absence_data');
           window.location.replace('https://pixta.1office.vn/approval-absence-absence?menu=private');
-        } else {
-          console.log(this.responseText);
-          alert(this.responseText);
         }
       }
     };
@@ -255,11 +273,11 @@ function createInOutData() {
     unHighLight();
     highLight(inOutData);
     localStorage.setItem("1office_inout_data", JSON.stringify(inOutData));
-    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;\" colspan=\"7\">Những ngày thiếu giờ check-in/check-out đã được bôi đỏ, hãy kiểm tra lại và click: <button onClick=\"createOvertime();\">Continue</button> để tạo đơn Checkin/Checkout</td></tr>");
+    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;\" colspan=\"7\">Những ngày không có check-in/check-out đã được bôi đỏ, hãy kiểm tra lại và click: <button onClick=\"createOvertime();\">Continue</button> để tạo đơn Checkin/Checkout</td></tr>");
     $("html, body").animate({ scrollTop: 0 }, "fast");
   } else {
     unHighLight();
-    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;color:green;\" colspan=\"7\">Chúc mừng bạn chả còn gì để làm ở đây cả</td></tr>");
+    $("#action-content table").prepend("<tr id=\"w1l-notice\"><td style=\"padding: 10px;font-size:14px;color:green;\" colspan=\"7\">Thông tin checkin/checout của bạn đã đầy đủ.</td></tr>");
     $("html, body").animate({ scrollTop: 0 }, "fast");
   }
 }
@@ -301,6 +319,34 @@ function createInOut() {
 
     xhr.send(param);
   });
+}
+
+function getAbsenceData() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://pixta.1office.vn/approval/absence/helper/getnb', true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        console.log(this.responseText);
+        data = JSON.parse(this.responseText);
+        //closeDialog();
+        alert("Tổng thời gian nghỉ bù: " + data.nb_total + " giờ\n" +
+              "Đã sử dụng: " + data.nb_used + " giờ\n" +
+              "Còn lại: " + data.nb_amount + " giờ");
+      } else {
+        console.log(this.responseText);
+        alert(this.responseText);
+      }
+    }
+  };
+
+  var param = new FormData();
+  param.append('method', 'mine');
+  param.append('inlineLogin', 1);
+  param.append('reason', 37);
+  param.append('post_id', 0);
+
+  xhr.send(param);
 }
 
 function findDateElem(date) {
@@ -373,9 +419,10 @@ chrome.runtime.onMessage.addListener(
                          createInOut.toString() + ";" +
                          createInOutData.toString() + ";" +
                          createAbsenceData.toString() + ";" +
-                         createOvertimeData.toString() + ";";
+                         createOvertimeData.toString() + ";" +
+                         getAbsenceData.toString() + ";";
       document.head.appendChild(script);
-      $("body").prepend("<div id='w1l-select-shift-dialog' class='dialog pop-bold pop-box pop-box-click pop-box-contextmenu pop-alert draggable-done hidden' tabindex='-1' remove-monitor='1' style='max-width: 90%; position: fixed; z-index: 1000001; visibility: visible; pointer-events: visible; top: 398.5px; left: 821.5px; opacity: 1;' draggable='false' _draggable='true'> <div class='dialog-header'> <span class='dialog-title'>What 1office lacks</span> <i ignore-draggable='' onclick='closeDialog();' class='dialog-close icon-multiply'></i> </div><div class='dialog-content'> <div class='dialog-message'> Hãy chọn ca làm việc:<br><div class='form-group form-buttons'> <div> <div id='w1l-shift-1' onclick='setShift(SHIFT_800)' no-render='' class='checks radio' render-elem='1' title='Ctrl + Shift + Space' tabindex='0' checked='checked'> <div></div></div>8:00<br><div id='w1l-shift-2' onclick='setShift(SHIFT_830)' no-render='' class='checks radio' render-elem='1' title='Ctrl + Shift + Space' tabindex='0'> <div></div></div>8:30 </div></div>Lựa chọn đơn cần tạo:<br><br><div class='form-group form-buttons'> <div class='form-buttons'> <button class='btn btn-default' onClick='createOvertimeData()'>Đơn làm thêm</button> <button class='btn btn-default' onClick='createAbsenceData()'>Đơn nghỉ bù</button> </div></div><div class='form-group form-buttons'> <div class='form-buttons'> <button class='btn btn-default' onClick='createInOutData()'>Đơn checkin/checkout</button> <button class='btn btn-default' onClick='alert(\"Not available\")'>Đơn nghỉ phép</button> </div></div></div></div>");
+      $("body").prepend("<div id='w1l-select-shift-dialog' class='dialog pop-bold pop-box pop-box-click pop-box-contextmenu pop-alert draggable-done hidden' tabindex='-1' remove-monitor='1' style='max-width: 90%; position: fixed; z-index: 1000001; visibility: visible; pointer-events: visible; top: 25%; left: 40%; opacity: 1;' draggable='false' _draggable='true'><div class='dialog-header'> <span class='dialog-title'>What 1office lacks</span> <i ignore-draggable='' onclick='closeDialog();' class='dialog-close icon-multiply'></i></div><div class='dialog-content'><div class='dialog-message'> Hãy chọn ca làm việc:<br><div class='form-group form-buttons'><div><div id='w1l-shift-1' onclick='setShift(SHIFT_800)' no-render='' class='checks radio' render-elem='1' title='Ctrl + Shift + Space' tabindex='0' checked='checked'><div></div></div> 8:00<br><div id='w1l-shift-2' onclick='setShift(SHIFT_830)' no-render='' class='checks radio' render-elem='1' title='Ctrl + Shift + Space' tabindex='0'><div></div></div> 8:30</div></div><div class='form-group form-buttons'><div class='form-buttons'> <button class='btn btn-default' onClick='getAbsenceData()'>Kiểm tra quỹ thời gian nghỉ bù</button></div></div> Lựa chọn đơn cần tạo:<br><br><div class='form-group form-buttons'><div class='form-buttons'> <button class='btn btn-default' onClick='createOvertimeData()'>Đơn làm thêm</button> <button class='btn btn-default' onClick='createAbsenceData()'>Đơn nghỉ bù</button></div></div><div class='form-group form-buttons'><div class='form-buttons'> <button class='btn btn-default' onClick='createInOutData()'>Đơn checkin/checkout</button> <button class='btn btn-default' onClick='alert(\"Not available\")'>Đơn nghỉ phép</button></div></div></div></div></div>");
     } else if( request.message === "clicked_browser_action" ) {
       var url = window.location.href;
       if (url.includes("user/attendance")) {
